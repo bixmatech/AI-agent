@@ -12,6 +12,12 @@ class EnsureInstalled
 {
     public function handle(Request $request, Closure $next): Response
     {
+cursor/build-ai-agent-saas-platform-15dc
+        if (app()->environment('testing')) {
+            return $next($request);
+        }
+
+
         $installed = false;
         if (file_exists(base_path('.env')) && config('app.key')) {
             try {

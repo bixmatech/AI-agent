@@ -4,13 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\ChatThread;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+ cursor/build-ai-agent-saas-platform-15dc
+use Illuminate\Support\Facades\Auth;
+
 
 class ThreadController extends Controller
 {
     public function share(ChatThread $thread)
     {
-        $this->authorize('view', $thread);
+cursor/build-ai-agent-saas-platform-15dc
+        if ($thread->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         if (!$thread->is_public) {
             $thread->update(['is_public' => true]);
         }
