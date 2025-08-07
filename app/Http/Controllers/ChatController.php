@@ -6,7 +6,9 @@ use App\Models\Agent;
 use App\Models\ChatMessage;
 use App\Models\ChatThread;
 use Illuminate\Http\Request;
+cursor/build-ai-agent-saas-platform-15dc
 use Illuminate\Support\Facades\Cache;
+
 use OpenAI;
 
 class ChatController extends Controller
@@ -39,8 +41,10 @@ class ChatController extends Controller
 
         $message = $this->filterBadWords($data['message']);
 
+cursor/build-ai-agent-saas-platform-15dc
         $threadId = $data['thread_id'] ?? null;
         $thread = $threadId ? ChatThread::findOrFail($threadId) : ChatThread::create([
+
             'user_id' => $user->id,
             'agent_id' => $agent->id,
             'title' => null,
@@ -56,6 +60,7 @@ class ChatController extends Controller
         $messages = $thread->messages()->orderBy('id')->get()->map(fn($m) => ['role' => $m->role, 'content' => $m->content])->toArray();
         if ($agent->prompt) array_unshift($messages, ['role' => 'system', 'content' => $agent->prompt]);
 
+cursor/build-ai-agent-saas-platform-15dc
         if (app()->environment('testing')) {
             $answer = 'TEST_RESPONSE';
             $promptTokens = 0;
@@ -78,6 +83,7 @@ class ChatController extends Controller
             $promptTokens = $resp->usage->promptTokens ?? 0;
             $completionTokens = $resp->usage->completionTokens ?? 0;
         }
+
 
         ChatMessage::create([
             'chat_thread_id' => $thread->id,
@@ -105,8 +111,10 @@ class ChatController extends Controller
             'thread_key' => 'nullable|string',
         ]);
 
+cursor/build-ai-agent-saas-platform-15dc
         $key = 'guest_trial:'.md5(($request->ip() ?? 'unknown').($request->userAgent() ?? ''));
         $trialUsed = (int) Cache::get($key, 0);
+
         if ($trialUsed >= 3) {
             return response()->json(['error' => 'Trial limit reached. Please log in.'], 429);
         }
@@ -117,6 +125,7 @@ class ChatController extends Controller
         if ($agent->prompt) $messages[] = ['role' => 'system', 'content' => $agent->prompt];
         $messages[] = ['role' => 'user', 'content' => $message];
 
+cursor/build-ai-agent-saas-platform-15dc
         if (app()->environment('testing')) {
             $answer = 'TEST_RESPONSE';
         } else {
@@ -131,6 +140,7 @@ class ChatController extends Controller
         }
 
         Cache::put($key, $trialUsed + 1, now()->addDay());
+
 
         return response()->json([
             'message' => $answer,

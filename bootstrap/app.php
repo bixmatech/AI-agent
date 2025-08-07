@@ -5,8 +5,10 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\EnsureInstalled;
 use App\Http\Middleware\AdminOnly;
+ cursor/build-ai-agent-saas-platform-15dc
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
+
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -20,8 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => AdminOnly::class,
         ]);
+cursor/build-ai-agent-saas-platform-15dc
         $middleware->statefulApi();
         // $middleware->throttleApi(); // Disabled to avoid missing rate limiter binding
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Optionally define API rate limiter here if needed in production
